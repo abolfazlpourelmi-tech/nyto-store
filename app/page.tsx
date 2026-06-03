@@ -1,101 +1,138 @@
-import Image from "next/image";
+import { HeroBanner }      from "@/components/home/HeroBanner";
+import { CategorySlider }  from "@/components/home/CategorySlider";
+import { FeaturedProducts } from "@/components/home/FeaturedProducts";
+import { ProductRow }      from "@/components/home/ProductRow";
+import { AboutSection }    from "@/components/home/AboutSection";
+import { ProductCard }     from "@/components/product/ProductCard";
+import { products }        from "@/lib/mock-data";
+import Link                from "next/link";
+import { ChevronLeft, Truck, Shield, RotateCcw, Headphones } from "lucide-react";
 
-export default function Home() {
+const perks = [
+  { icon: Truck,      title: "ارسال سریع",     desc: "کمتر از ۴۸ ساعت"   },
+  { icon: Shield,     title: "ضمانت اصالت",    desc: "محصولات ۱۰۰٪ اصل"  },
+  { icon: RotateCcw,  title: "۷ روز مرجوعی",  desc: "بازگشت بدون دردسر" },
+  { icon: Headphones, title: "پشتیبانی ۲۴/۷", desc: "همیشه در کنار شما" },
+];
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="container py-4 md:py-8 space-y-7 md:space-y-10">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* ── Hero ── */}
+      <HeroBanner />
+
+      {/* ── Categories ── */}
+      <CategorySlider />
+
+      {/* ── Special offers (orange header + countdown + horizontal cards) ── */}
+      <FeaturedProducts />
+
+      {/* ── Promo banners strip ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="rounded-2xl bg-gradient-to-l from-orange-500 to-rose-500 p-5 text-white relative overflow-hidden">
+          <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full bg-white/10" />
+          <p className="text-xs font-semibold opacity-80 mb-1">تا ۳۰٪ تخفیف</p>
+          <h3 className="font-black text-lg leading-snug">فروش ویژه<br />گوشی و لپ‌تاپ</h3>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="rounded-2xl bg-gradient-to-l from-violet-600 to-blue-600 p-5 text-white relative overflow-hidden">
+          <div className="absolute -top-4 -left-4 w-24 h-24 rounded-full bg-white/10" />
+          <p className="text-xs font-semibold opacity-80 mb-1">ارسال رایگان</p>
+          <h3 className="font-black text-lg leading-snug">خریدهای<br />بالای ۵۰۰ هزار تومان</h3>
+        </div>
+      </div>
+
+      {/* ── 1. جدیدترین محصولات ── */}
+      <ProductRow
+        title="جدیدترین محصولات"
+        products={products.filter((p) => p.isNew)}
+        viewAllHref="/products?sort=newest"
+        accentColor="#22c55e"
+        badge={{ label: "جدید", bg: "#22c55e", color: "#fff" }}
+      />
+
+      {/* ── 2. پرفروش‌ترین‌ها ── */}
+      <ProductRow
+        title="پرفروش‌ترین‌ها"
+        products={[...products].sort((a, b) => b.reviewCount - a.reviewCount).slice(0, 10)}
+        viewAllHref="/products?sort=bestselling"
+        accentColor="#ef4444"
+        badge={{ label: "پرفروش 🔥", bg: "linear-gradient(to left,#e55f00,#ef4444)", color: "#fff" }}
+      />
+
+      {/* ── 3. محبوب‌ترین‌ها ── */}
+      <ProductRow
+        title="محبوب‌ترین‌ها"
+        products={[...products].sort((a, b) => b.rating - a.rating).slice(0, 10)}
+        viewAllHref="/products?sort=rating"
+        accentColor="#a855f7"
+        badge={{ label: "♡ محبوب", bg: "linear-gradient(to left,#7c3aed,#ec4899)", color: "#fff" }}
+      />
+
+      {/* ── 4. ویژه شما ── */}
+      <ProductRow
+        title="ویژه شما"
+        products={products.filter((p) => p.isFeatured)}
+        viewAllHref="/products"
+        accentColor="#3b82f6"
+        badge={{ label: "پیشنهاد ویژه", bg: "linear-gradient(to left,#1d4ed8,#0ea5e9)", color: "#fff" }}
+      />
+
+      {/* ── 5. همه محصولات (grid) ── */}
+      <section>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ width: "4px", height: "22px", background: "hsl(var(--primary))", borderRadius: "3px" }} />
+            <h2 style={{ fontSize: "15px", fontWeight: 800, margin: 0 }}>همه محصولات</h2>
+          </div>
+          <Link
+            href="/products"
+            style={{ display: "flex", alignItems: "center", gap: "2px", fontSize: "12px", fontWeight: 700, color: "hsl(var(--muted-foreground))", textDecoration: "none" }}
+          >
+            مشاهده همه
+            <ChevronLeft style={{ width: "14px", height: "14px" }} />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {products.slice(0, 8).map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* ── Perks strip — 2-col mobile / 4-col desktop ── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        {perks.map(({ icon: Icon, title, desc }) => (
+          <div
+            key={title}
+            className="bg-card border border-border/40 rounded-2xl shadow-card"
+            style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: "10px", padding: "12px" }}
+          >
+            <div
+              style={{
+                flexShrink: 0, width: "36px", height: "36px", borderRadius: "10px",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                backgroundColor: "hsl(var(--primary) / 0.1)",
+              }}
+            >
+              <Icon style={{ width: "16px", height: "16px", color: "hsl(var(--primary))" }} />
+            </div>
+            <div style={{ minWidth: 0 }}>
+              <p style={{ fontSize: "12px", fontWeight: 700, lineHeight: 1.3, margin: 0 }}>{title}</p>
+              <p
+                className="hidden md:block"
+                style={{ fontSize: "11px", color: "hsl(var(--muted-foreground))", margin: 0, marginTop: "2px" }}
+              >
+                {desc}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── About + trust badges ── */}
+      <AboutSection />
+
     </div>
   );
 }
