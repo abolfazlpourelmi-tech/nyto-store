@@ -229,3 +229,24 @@ export const banners = [
     bg: "from-emerald-600 to-teal-600",
   },
 ];
+
+/* ── Rich category groups (with sub-categories) ──
+   Shared by the desktop mega-menu (Header) and the mobile categories page.
+   `slug` maps to an existing product category for filtering. */
+export interface CategoryGroup {
+  id: string;
+  name: string;
+  icon: string;
+  slug: string;
+  subs: string[];
+}
+
+export const categoryGroups: CategoryGroup[] = [
+  { id: "mobile",   name: "موبایل و تبلت",      icon: "📱", slug: "mobile",   subs: ["گوشی هوشمند", "تبلت", "اکسسوری موبایل", "شارژر و کابل", "سیم‌کارت"] },
+  { id: "laptop",   name: "لپ‌تاپ و کامپیوتر", icon: "💻", slug: "laptop",   subs: ["لپ‌تاپ", "کامپیوتر دسکتاپ", "مانیتور", "هارد و SSD", "RAM و حافظه"] },
+  { id: "audio",    name: "صوتی و تصویری",       icon: "🎧", slug: "mobile",   subs: ["هدفون و ایرباد", "بلندگو بی‌سیم", "تلویزیون", "پروجکتور", "سیستم صوتی خانگی"] },
+  { id: "home",     name: "خانه و آشپزخانه",     icon: "🏠", slug: "home",     subs: ["لوازم آشپزخانه", "لوازم خانگی برقی", "دکوراسیون", "روشنایی", "ابزار و یراق‌آلات"] },
+  { id: "clothing", name: "پوشاک و کفش",         icon: "👕", slug: "clothing", subs: ["پوشاک مردانه", "پوشاک زنانه", "کفش مردانه", "کفش زنانه", "اکسسوری پوشیدنی"] },
+  { id: "sports",   name: "ورزش و سرگرمی",       icon: "⚽", slug: "sports",   subs: ["تجهیزات ورزشی", "پوشاک ورزشی", "دوچرخه و اسکوتر", "کمپینگ و طبیعت‌گردی", "بازی‌های ویدیویی"] },
+  { id: "beauty",   name: "زیبایی و سلامت",      icon: "💄", slug: "beauty",   subs: ["مراقبت پوست", "آرایشی", "عطر و ادکلن", "مراقبت مو", "بهداشت شخصی"] },
+];

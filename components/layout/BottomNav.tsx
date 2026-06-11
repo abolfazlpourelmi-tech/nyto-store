@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/",               icon: Home,        label: "خانه"    },
-  { href: "/products",       icon: Grid2X2,     label: "محصولات" },
+  { href: "/categories",     icon: Grid2X2,     label: "دسته‌بندی" },
   { href: "/cart",           icon: ShoppingCart,label: "سبد"      },
   { href: "/account/orders", icon: Package,     label: "سفارش‌ها" },
   { href: "/account",        icon: User,        label: "حساب"     },

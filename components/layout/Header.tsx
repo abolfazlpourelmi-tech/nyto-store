@@ -5,18 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCartStore } from "@/store/cart";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
-import { categories } from "@/lib/mock-data";
-
-// ── Mega-menu category data ──────────────────────────────────
-const MEGA_CATS = [
-  { id: "mobile",   name: "موبایل و تبلت",         icon: "📱", slug: "mobile",   subs: ["گوشی هوشمند", "تبلت", "اکسسوری موبایل", "شارژر و کابل", "سیم‌کارت"] },
-  { id: "laptop",   name: "لپ‌تاپ و کامپیوتر",    icon: "💻", slug: "laptop",   subs: ["لپ‌تاپ", "کامپیوتر دسکتاپ", "مانیتور", "هارد و SSD", "RAM و حافظه"] },
-  { id: "audio",    name: "صوتی و تصویری",          icon: "🎧", slug: "mobile",   subs: ["هدفون و ایرباد", "بلندگو بی‌سیم", "تلویزیون", "پروجکتور", "سیستم صوتی خانگی"] },
-  { id: "home",     name: "خانه و آشپزخانه",        icon: "🏠", slug: "home",     subs: ["لوازم آشپزخانه", "لوازم خانگی برقی", "دکوراسیون", "روشنایی", "ابزار و یراق‌آلات"] },
-  { id: "clothing", name: "پوشاک و کفش",            icon: "👕", slug: "clothing", subs: ["پوشاک مردانه", "پوشاک زنانه", "کفش مردانه", "کفش زنانه", "اکسسوری پوشیدنی"] },
-  { id: "sports",   name: "ورزش و سرگرمی",          icon: "⚽", slug: "sports",   subs: ["تجهیزات ورزشی", "پوشاک ورزشی", "دوچرخه و اسکوتر", "کمپینگ و طبیعت‌گردی", "بازی‌های ویدیویی"] },
-  { id: "beauty",   name: "زیبایی و سلامت",         icon: "💄", slug: "beauty",   subs: ["مراقبت پوست", "آرایشی", "عطر و ادکلن", "مراقبت مو", "بهداشت شخصی"] },
-];
+import { categories, categoryGroups as MEGA_CATS } from "@/lib/mock-data";
 
 // ── Sample notifications ─────────────────────────────────────
 const NOTIFS = [
