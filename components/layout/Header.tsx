@@ -5,14 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useCartStore } from "@/store/cart";
 import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
-import { categories, categoryGroups as MEGA_CATS } from "@/lib/mock-data";
-
-// ── Sample notifications ─────────────────────────────────────
-const NOTIFS = [
-  { id: 1, icon: "🚚", title: "سفارش شما ارسال شد",    sub: "سفارش #۱۲۳۴ در راه است",                  time: "۱۰ دقیقه پیش" },
-  { id: 2, icon: "🎁", title: "تخفیف ویژه فعال شد",    sub: "۲۰٪ تخفیف روی محصولات انتخابی",           time: "۲ ساعت پیش"   },
-  { id: 3, icon: "✅", title: "سفارش تحویل داده شد",   sub: "سفارش #۱۲۱۸ با موفقیت تحویل شد",          time: "دیروز"         },
-];
+import { categories, categoryGroups as MEGA_CATS, notifications as NOTIFS } from "@/lib/mock-data";
 
 export function Header() {
   const [query,      setQuery]      = useState("");
@@ -145,20 +138,28 @@ export function Header() {
                 <div style={{ padding: "14px 16px 10px", borderBottom: "1px solid hsl(var(--border) / 0.5)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <span style={{ fontWeight: 800, fontSize: "14px" }}>اعلان‌ها</span>
                   <span style={{ fontSize: "11px", color: "hsl(var(--primary))", fontWeight: 700, background: "hsl(var(--primary) / 0.1)", padding: "2px 8px", borderRadius: "999px" }}>
-                    ۳ جدید
+                    {NOTIFS.filter((n) => !n.read).length} جدید
                   </span>
                 </div>
 
                 {/* Items */}
-                {NOTIFS.map((n) => (
-                  <div
+                {NOTIFS.slice(0, 3).map((n) => (
+                  <Link
                     key={n.id}
+                    href={`/notifications/${n.id}`}
+                    onClick={() => setNotifOpen(false)}
                     style={{
+                      display: "flex",
                       padding: "12px 16px",
                       borderBottom: "1px solid hsl(var(--border) / 0.3)",
-                      display: "flex", gap: "10px", alignItems: "flex-start",
+                      gap: "10px", alignItems: "flex-start",
                       cursor: "pointer",
+                      textDecoration: "none",
+                      color: "inherit",
+                      transition: "background 0.1s",
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "hsl(var(--surface))")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     <div style={{
                       width: "36px", height: "36px", borderRadius: "10px",
@@ -170,15 +171,21 @@ export function Header() {
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: "12px", fontWeight: 700, margin: 0, marginBottom: "2px" }}>{n.title}</p>
-                      <p style={{ fontSize: "11px", color: "hsl(var(--muted-foreground))", margin: 0, marginBottom: "3px" }}>{n.sub}</p>
+                      <p style={{ fontSize: "11px", color: "hsl(var(--muted-foreground))", margin: 0, marginBottom: "3px" }}>{n.summary}</p>
                       <p style={{ fontSize: "10px", color: "hsl(var(--muted-foreground))", margin: 0 }}>{n.time}</p>
                     </div>
-                  </div>
+                    {!n.read && (
+                      <span style={{
+                        width: "7px", height: "7px", borderRadius: "50%",
+                        background: "hsl(var(--primary))", flexShrink: 0, marginTop: "6px",
+                      }} />
+                    )}
+                  </Link>
                 ))}
 
                 {/* Footer link */}
                 <Link
-                  href="/"
+                  href="/notifications"
                   onClick={() => setNotifOpen(false)}
                   style={{
                     display: "block", textAlign: "center", padding: "12px 16px",
