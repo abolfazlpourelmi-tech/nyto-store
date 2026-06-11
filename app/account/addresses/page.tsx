@@ -1,13 +1,18 @@
 "use client";
 import { useState } from "react";
-import { MapPin, Plus, Trash2, Pencil, Check, X, Star } from "lucide-react";
+import dynamic from "next/dynamic";
+import { MapPin, MapPinned, Plus, Trash2, Pencil, Check, X, Star } from "lucide-react";
 import { useAddressStore } from "@/store/address";
-import { cn } from "@/lib/utils";
+import { cn, persianNumber } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import type { Address } from "@/types";
 
+const LocationPickerModal = dynamic(() => import("@/components/account/LocationPickerModal"), { ssr: false });
+
 const emptyForm = {
   fullName: "", phone: "", province: "", city: "", address: "", postalCode: "",
+  lat: undefined as number | undefined,
+  lng: undefined as number | undefined,
 };
 
 type FormState = typeof emptyForm;
@@ -22,6 +27,7 @@ export default function AccountAddressesPage() {
   const [showForm, setShowForm] = useState(false);
   const [editId,   setEditId]   = useState<string | null>(null);
   const [form,     setForm]     = useState<FormState>(emptyForm);
+  const [mapOpen,  setMapOpen]  = useState(false);
 
   const updateField = (key: keyof FormState, val: string) =>
     setForm((f) => ({ ...f, [key]: val }));
@@ -36,6 +42,7 @@ export default function AccountAddressesPage() {
     setForm({
       fullName: a.fullName, phone: a.phone, province: a.province,
       city: a.city, address: a.address, postalCode: a.postalCode,
+      lat: a.lat, lng: a.lng,
     });
     setEditId(a.id);
     setShowForm(true);
@@ -110,6 +117,29 @@ export default function AccountAddressesPage() {
                 />
               </div>
             ))}
+
+            <div className="sm:col-span-2">
+              <label className="text-xs font-semibold text-muted-foreground mb-1.5 block">موقعیت روی نقشه</label>
+              <button
+                type="button"
+                onClick={() => setMapOpen(true)}
+                className="w-full h-11 bg-surface rounded-xl border border-border/60 px-3 text-sm flex items-center justify-between gap-2 hover:border-primary/40 transition-colors"
+              >
+                <span className="flex items-center gap-2">
+                  <MapPinned className="h-4 w-4 text-primary flex-shrink-0" />
+                  {form.lat != null && form.lng != null ? (
+                    <span className="text-foreground" dir="ltr">
+                      {persianNumber(form.lat.toFixed(5))}, {persianNumber(form.lng.toFixed(5))}
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">مشخص کردن روی نقشه</span>
+                  )}
+                </span>
+                <span className="text-xs font-bold text-primary flex-shrink-0">
+                  {form.lat != null ? "ویرایش" : "انتخاب"}
+                </span>
+              </button>
+            </div>
           </div>
           <div className="flex gap-3">
             <button
@@ -180,6 +210,17 @@ export default function AccountAddressesPage() {
             {a.postalCode && (
               <p className="text-xs text-muted-foreground mt-1">کد پستی: {a.postalCode}</p>
             )}
+            {a.lat != null && a.lng != null && (
+              <a
+                href={`https://www.openstreetmap.org/?mlat=${a.lat}&mlon=${a.lng}#map=16/${a.lat}/${a.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-bold text-primary mt-1.5 hover:underline"
+              >
+                <MapPinned className="h-3.5 w-3.5" />
+                مشاهده روی نقشه
+              </a>
+            )}
 
             <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border/40">
               {!a.isDefault && (
@@ -210,6 +251,16 @@ export default function AccountAddressesPage() {
           </div>
         ))}
       </div>
+
+      <LocationPickerModal
+        open={mapOpen}
+        onClose={() => setMapOpen(false)}
+        initial={{ lat: form.lat, lng: form.lng }}
+        onConfirm={(lat, lng) => {
+          setForm((f) => ({ ...f, lat, lng }));
+          setMapOpen(false);
+        }}
+      />
     </div>
   );
 }
