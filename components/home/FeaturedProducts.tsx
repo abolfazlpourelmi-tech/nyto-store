@@ -53,8 +53,8 @@ function CountdownTimer() {
 
 /* ──────────────────────────────────────────────────────────────
    White card that pops against the gradient background.
-   Dimensions match ScrollCard exactly (162 × 320 px) so rows
-   align when both appear on the same page.
+   Dimensions match ScrollCard exactly (162×320 mobile, 210×410 md+)
+   so rows align when both appear on the same page.
    Text uses hardcoded dark values so the card reads correctly
    on both light and dark OS themes (background is always #fff).
 ────────────────────────────────────────────────────────────── */
@@ -72,9 +72,8 @@ function MiniCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.slug}`} style={{ display: "block", textDecoration: "none", flexShrink: 0 }}>
       <div
+        className="w-[162px] h-[320px] md:w-[210px] md:h-[410px] hover:-translate-y-0.5 hover:shadow-xl"
         style={{
-          width: "162px",
-          height: "320px",
           borderRadius: "16px",
           background: "#ffffff",
           display: "flex",
@@ -83,10 +82,9 @@ function MiniCard({ product }: { product: Product }) {
           boxShadow: "0 4px 18px rgba(0,0,0,0.14)",
           transition: "transform 0.2s, box-shadow 0.2s",
         }}
-        className="hover:-translate-y-0.5 hover:shadow-xl"
       >
-        {/* Image — 148 px fixed */}
-        <div style={{ position: "relative", width: "162px", height: "148px", flexShrink: 0, background: "#f5f5f5", overflow: "hidden" }}>
+        {/* Image — 148/190 px fixed */}
+        <div className="w-[162px] h-[148px] md:w-[210px] md:h-[190px]" style={{ position: "relative", flexShrink: 0, background: "#f5f5f5", overflow: "hidden" }}>
           {imgFailed ? (
             <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <ImageOff style={{ width: "28px", height: "28px", color: "#ccc" }} />
@@ -103,55 +101,53 @@ function MiniCard({ product }: { product: Product }) {
             />
           )}
           {product.discount && (
-            <div style={{
+            <div className="text-[10px] md:text-xs px-[7px] md:px-2.5" style={{
               position: "absolute", top: "8px", right: "8px",
               background: "#FF6B00", color: "#fff",
-              fontSize: "10px", fontWeight: 800, borderRadius: "999px",
-              padding: "2px 7px", lineHeight: "16px",
+              fontWeight: 800, borderRadius: "999px",
+              lineHeight: "16px",
             }}>
               {persianNumber(product.discount)}٪
             </div>
           )}
           {product.stock === 0 && (
             <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.38)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontWeight: 700, fontSize: "12px", background: "rgba(0,0,0,0.45)", padding: "4px 12px", borderRadius: "999px" }}>ناموجود</span>
+              <span className="text-xs md:text-sm" style={{ color: "#fff", fontWeight: 700, background: "rgba(0,0,0,0.45)", padding: "4px 12px", borderRadius: "999px" }}>ناموجود</span>
             </div>
           )}
         </div>
 
         {/* Content */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", padding: "10px 12px 12px", minHeight: 0 }}>
+        <div className="p-[10px_12px_12px] md:p-4" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
 
           {/* Brand */}
-          <p style={{ fontSize: "10px", color: "#999", margin: 0, lineHeight: 1.4, flexShrink: 0 }}>{product.brand}</p>
+          <p className="text-[10px] md:text-xs" style={{ color: "#999", margin: 0, lineHeight: 1.4, flexShrink: 0 }}>{product.brand}</p>
 
-          {/* Title — 38 px fixed, never grows */}
-          <p style={{
-            fontSize: "12px", fontWeight: 600, lineHeight: 1.45,
+          {/* Title — fixed height, never grows */}
+          <p className="text-xs md:text-sm h-[38px] md:h-[48px] line-clamp-2" style={{
+            fontWeight: 600, lineHeight: 1.45,
             margin: "3px 0 0", flexShrink: 0, color: "#1a1a1a",
-            height: "38px", overflow: "hidden",
-            display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
           }}>
             {product.name}
           </p>
 
           {/* Rating */}
           <div style={{ display: "flex", alignItems: "center", gap: "3px", marginTop: "5px", flexShrink: 0 }}>
-            <Star style={{ width: "10px", height: "10px", fill: "#fbbf24", color: "#fbbf24", flexShrink: 0 }} />
-            <span style={{ fontSize: "10px", fontWeight: 700, color: "#555" }}>{product.rating}</span>
-            <span style={{ fontSize: "10px", color: "#aaa" }}>({persianNumber(product.reviewCount)})</span>
+            <Star className="h-2.5 w-2.5 md:h-3 md:w-3" style={{ fill: "#fbbf24", color: "#fbbf24", flexShrink: 0 }} />
+            <span className="text-[10px] md:text-xs" style={{ fontWeight: 700, color: "#555" }}>{product.rating}</span>
+            <span className="text-[10px] md:text-xs" style={{ color: "#aaa" }}>({persianNumber(product.reviewCount)})</span>
           </div>
 
-          {/* Price block — 32 px fixed; old-price always rendered for uniform height */}
-          <div style={{ marginTop: "5px", flexShrink: 0, height: "32px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <p style={{
-              fontSize: "10px", color: "#bbb", textDecoration: "line-through",
+          {/* Price block — fixed height; old-price always rendered for uniform height */}
+          <div className="h-8 md:h-[42px]" style={{ marginTop: "5px", flexShrink: 0, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <p className="text-[10px] md:text-xs" style={{
+              color: "#bbb", textDecoration: "line-through",
               margin: 0, lineHeight: 1.4,
               visibility: product.originalPrice ? "visible" : "hidden",
             }}>
               {product.originalPrice ? formatPrice(product.originalPrice) : "—"}
             </p>
-            <p style={{ fontSize: "12px", fontWeight: 800, color: "#FF6B00", margin: 0, lineHeight: 1.3 }}>
+            <p className="text-xs md:text-base" style={{ fontWeight: 800, color: "#FF6B00", margin: 0, lineHeight: 1.3 }}>
               {formatPrice(product.price)}
             </p>
           </div>
@@ -163,14 +159,13 @@ function MiniCard({ product }: { product: Product }) {
           <button
             onClick={handleAdd}
             disabled={product.stock === 0}
+            className="text-[11px] md:text-sm py-[7px] md:py-2.5"
             style={{
               width: "100%",
               background: "#FF6B00",
               color: "#fff",
               border: "none",
               borderRadius: "10px",
-              padding: "7px 0",
-              fontSize: "11px",
               fontWeight: 700,
               cursor: product.stock === 0 ? "not-allowed" : "pointer",
               opacity: product.stock === 0 ? 0.5 : 1,
@@ -181,7 +176,7 @@ function MiniCard({ product }: { product: Product }) {
               flexShrink: 0,
             }}
           >
-            <Plus style={{ width: "11px", height: "11px" }} />
+            <Plus className="h-[11px] w-[11px] md:h-3.5 md:w-3.5" />
             افزودن
           </button>
         </div>
@@ -245,12 +240,12 @@ export function FeaturedProducts() {
 
       {/* ── Horizontal card scroll — transparent so gradient shows through/around cards ── */}
       <div
+        className="gap-3 md:gap-4"
         style={{
           display: "flex",
           flexDirection: "row",
           flexWrap: "nowrap",
           overflowX: "auto",
-          gap: "12px",
           padding: "0 16px 20px",
           WebkitOverflowScrolling: "touch",
           scrollbarWidth: "none",

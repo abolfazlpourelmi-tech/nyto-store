@@ -60,12 +60,12 @@ export function ProductRow({ title, products, viewAllHref, accentColor, badge }:
 
       {/* Horizontal scroll row */}
       <div
+        className="gap-3 md:gap-4"
         style={{
           display: "flex",
           flexDirection: "row",
           flexWrap: "nowrap",
           overflowX: "auto",
-          gap: "12px",
           paddingBottom: "6px",
           scrollbarWidth: "none",
           msOverflowStyle: "none",

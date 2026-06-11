@@ -70,16 +70,19 @@ Orange header with live countdown timer. Timer `dir="ltr"` to render digits L→
 Horizontal scroll section. Props: `title`, `products`, `viewAllHref`, `accentColor` (hex for the accent bar), `badge: CardBadge`. Used for all 4 filtered rows on the home page.
 
 ### `components/product/ScrollCard.tsx`
-**Fixed-dimension card used in horizontal scroll rows. All dimensions are explicit pixels — do not change to flex/auto.**
+**Fixed-dimension card used in horizontal scroll rows. All dimensions are explicit pixels (responsive via `md:` Tailwind classes) — do not change to flex/auto.**
 
 ```
-Card:        width 162px, height 320px
-Image:       height 148px, flexShrink 0
-Title:       height 38px fixed (overflow hidden, line-clamp 2) — NOT flex:1
-Price block: height 32px — old-price ALWAYS rendered, visibility:hidden if absent
-Spacer:      flex:1 — pushes button to bottom
-Button:      flexShrink 0, soft outlined style
+                mobile      md+
+Card:           162×320px   210×410px
+Image:          148px       190px      (flexShrink 0)
+Title:          38px        48px       (overflow hidden, line-clamp 2) — NOT flex:1
+Price block:    32px        42px       — old-price ALWAYS rendered, visibility:hidden if absent
+Spacer:         flex:1 — pushes button to bottom
+Button:         flexShrink 0, soft outlined style
 ```
+
+Width/height/font-size/padding that differ per breakpoint live in `className` (e.g. `w-[162px] md:w-[210px]`) since inline `style` would override Tailwind. `MiniCard` in `FeaturedProducts.tsx` mirrors these exact dimensions so rows align.
 
 Old-price is always rendered (with `visibility: hidden` when `originalPrice` is absent) to keep price block height uniform across all cards.
 
