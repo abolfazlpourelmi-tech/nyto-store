@@ -221,10 +221,14 @@ function ProductsContent() {
   const searchParams   = useSearchParams();
   const query          = searchParams.get("q");
   const categoryParam  = searchParams.get("category");
+  const filterParam    = searchParams.get("filter");
+  const sortParam      = searchParams.get("sort") as SortOption | null;
 
   /* ── view / sort ── */
   const [view, setView] = useState<"grid" | "list">("grid");
-  const [sort, setSort] = useState<SortOption>("relevant");
+  const [sort, setSort] = useState<SortOption>(
+    sortParam && SORT_OPTIONS.some((o) => o.value === sortParam) ? sortParam : "relevant"
+  );
 
   /* ── filter state ── */
   const [selectedCategory] = useState<string | null>(categoryParam);
@@ -280,6 +284,8 @@ function ProductsContent() {
       );
     }
     if (selectedCategory) r = r.filter((p) => p.category.slug === selectedCategory);
+    if (filterParam === "new")      r = r.filter((p) => p.isNew);
+    if (filterParam === "featured") r = r.filter((p) => p.isFeatured);
     if (inStockOnly)       r = r.filter((p) => p.stock > 0);
     if (fastDelivery)      r = r.filter((p) => p.stock > 5);
     if (selectedBrands.length > 0) r = r.filter((p) => selectedBrands.includes(p.brand));
@@ -300,9 +306,15 @@ function ProductsContent() {
       case "newest":       r.sort((a, b) => Number(b.id)  - Number(a.id));  break;
     }
     return r;
-  }, [query, selectedCategory, inStockOnly, fastDelivery, selectedBrands, priceMin, priceMax, selectedOS, sort]);
+  }, [query, selectedCategory, filterParam, inStockOnly, fastDelivery, selectedBrands, priceMin, priceMax, selectedOS, sort]);
 
-  const pageTitle = query ? `نتایج جستجو: «${query}»` : "همه محصولات";
+  const pageTitle = query
+    ? `نتایج جستجو: «${query}»`
+    : filterParam === "new"      ? "جدیدترین محصولات"
+    : filterParam === "featured" ? "پیشنهادهای ویژه"
+    : sort === "bestselling"      ? "پرفروش‌ترین‌ها"
+    : sort === "rating"           ? "محبوب‌ترین‌ها"
+    : "همه محصولات";
 
   const fs: FilterState = {
     fastDelivery,  setFastDelivery,

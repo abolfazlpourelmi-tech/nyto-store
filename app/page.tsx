@@ -46,7 +46,7 @@ export default function HomePage() {
       <ProductRow
         title="جدیدترین محصولات"
         products={products.filter((p) => p.isNew)}
-        viewAllHref="/products?sort=newest"
+        viewAllHref="/products?filter=new&sort=newest"
         accentColor="#22c55e"
         badge={{ label: "جدید", bg: "#22c55e", color: "#fff" }}
       />
@@ -73,7 +73,7 @@ export default function HomePage() {
       <ProductRow
         title="ویژه شما"
         products={products.filter((p) => p.isFeatured)}
-        viewAllHref="/products"
+        viewAllHref="/products?filter=featured"
         accentColor="#3b82f6"
         badge={{ label: "پیشنهاد ویژه", bg: "linear-gradient(to left,#1d4ed8,#0ea5e9)", color: "#fff" }}
       />
