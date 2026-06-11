@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, Suspense, useState, useMemo } from "react";
+import { Suspense, useState, useMemo } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   LayoutGrid, List, ChevronDown, X,
@@ -75,7 +75,7 @@ function ToggleSwitch({ on, onChange }: { on: boolean; onChange: (v: boolean) =>
       onClick={() => onChange(!on)}
       style={{
         width: "36px", height: "20px", borderRadius: "999px",
-        background: on ? "#e53935" : "hsl(var(--border))",
+        background: on ? "hsl(var(--primary))" : "hsl(var(--border))",
         position: "relative", cursor: "pointer",
         transition: "background 0.2s", flexShrink: 0,
       }}
@@ -102,8 +102,8 @@ function CheckRow({
     >
       <div style={{
         width: "16px", height: "16px", borderRadius: "4px", flexShrink: 0,
-        border: `1.5px solid ${checked ? "#e53935" : "hsl(var(--border))"}`,
-        background: checked ? "#e53935" : "transparent",
+        border: `1.5px solid ${checked ? "hsl(var(--primary))" : "hsl(var(--border))"}`,
+        background: checked ? "hsl(var(--primary))" : "transparent",
         display: "flex", alignItems: "center", justifyContent: "center",
       }}>
         {checked && <Check style={{ width: "10px", height: "10px", color: "#fff" }} />}
@@ -183,9 +183,9 @@ function FilterPanel(fs: FilterState) {
                 width: "24px", height: "24px", borderRadius: "50%",
                 background: c.hex, cursor: "pointer",
                 border: fs.selectedColors.includes(c.label)
-                  ? "2.5px solid #e53935"
+                  ? "2.5px solid hsl(var(--primary))"
                   : c.outlined ? "1.5px solid hsl(var(--border))" : "none",
-                outline: fs.selectedColors.includes(c.label) ? "2px solid rgba(229,57,53,0.28)" : "none",
+                outline: fs.selectedColors.includes(c.label) ? "2px solid hsl(var(--primary) / 0.28)" : "none",
                 outlineOffset: "2px",
               }}
             />
@@ -316,16 +316,15 @@ function ProductsContent() {
     openGroups,    toggleGroup,
   };
 
-  /* ── shared sort bar item styles ── */
+  /* ── shared sort bar item styles (pill buttons) ── */
   const sortItemStyle = (active: boolean): React.CSSProperties => ({
-    padding: "0 8px", fontSize: "12px",
-    fontWeight: active ? 800 : 400,
-    color: active ? "#e53935" : "hsl(var(--muted-foreground))",
-    background: "none", border: "none", cursor: "pointer",
+    padding: "6px 13px", fontSize: "12px",
+    fontWeight: active ? 800 : 500,
+    color: active ? "#fff" : "hsl(var(--muted-foreground))",
+    background: active ? "hsl(var(--primary))" : "transparent",
+    border: "none", borderRadius: "999px", cursor: "pointer",
     flexShrink: 0, whiteSpace: "nowrap",
-    lineHeight: "44px",
-    borderBottom: active ? "2px solid #e53935" : "2px solid transparent",
-    transition: "color 0.15s",
+    transition: "background 0.15s, color 0.15s",
   });
 
   return (
@@ -338,9 +337,9 @@ function ProductsContent() {
           MOBILE: quick chip bar  (hidden on md+)
       ════════════════════════════════════════ */}
       <div
-        className="md:hidden"
+        className="flex md:hidden"
         style={{
-          display: "flex", flexDirection: "row", flexWrap: "nowrap",
+          flexDirection: "row", flexWrap: "nowrap",
           overflowX: "auto", gap: "8px", paddingBottom: "10px",
           scrollbarWidth: "none", marginBottom: "4px",
         } as React.CSSProperties}
@@ -351,7 +350,7 @@ function ProductsContent() {
           className={cn(
             "flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all",
             sort !== "relevant"
-              ? "text-red-600 border-red-400/50 bg-red-50 dark:bg-red-900/20"
+              ? "text-primary border-primary/50 bg-primary/10"
               : "bg-surface border-border/60 text-foreground"
           )}
         >
@@ -394,7 +393,7 @@ function ProductsContent() {
           className={cn(
             "flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold border transition-all",
             inStockOnly
-              ? "text-red-600 border-red-400/50 bg-red-50 dark:bg-red-900/20"
+              ? "text-primary border-primary/50 bg-primary/10"
               : "bg-surface border-border/60 text-muted-foreground"
           )}
         >
@@ -432,7 +431,7 @@ function ProductsContent() {
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                style={{ fontSize: "11px", color: "#e53935", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
+                style={{ fontSize: "11px", color: "hsl(var(--primary))", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
               >
                 حذف فیلترها
               </button>
@@ -452,30 +451,23 @@ function ProductsContent() {
               overflowX: "auto", scrollbarWidth: "none",
               background: "hsl(var(--card))",
               border: "1px solid hsl(var(--border) / 0.5)",
-              borderRadius: "12px", padding: "0 10px",
-              marginBottom: "16px", height: "44px", gap: "0",
+              borderRadius: "14px", padding: "7px 10px",
+              marginBottom: "16px", gap: "4px",
             } as React.CSSProperties}
           >
             {/* Icon + label */}
-            <div style={{ display: "flex", alignItems: "center", gap: "4px", flexShrink: 0, marginLeft: "6px" }}>
-              <ArrowUpDown style={{ width: "12px", height: "12px", color: "hsl(var(--muted-foreground))" }} />
-              <span style={{ fontSize: "12px", fontWeight: 700, color: "hsl(var(--muted-foreground))", whiteSpace: "nowrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "5px", flexShrink: 0, marginLeft: "6px" }}>
+              <ArrowUpDown style={{ width: "13px", height: "13px", color: "hsl(var(--muted-foreground))" }} />
+              <span style={{ fontSize: "12px", fontWeight: 700, color: "hsl(var(--foreground))", whiteSpace: "nowrap" }}>
                 مرتب‌سازی:
               </span>
             </div>
 
-            {/* Sort options — text links with | separators */}
-            {SORT_OPTIONS.map((opt, i) => (
-              <Fragment key={opt.value}>
-                {i > 0 && (
-                  <span style={{ color: "hsl(var(--border))", padding: "0 1px", flexShrink: 0, fontSize: "15px", lineHeight: 1, userSelect: "none", opacity: 0.6 }}>
-                    |
-                  </span>
-                )}
-                <button onClick={() => setSort(opt.value)} style={sortItemStyle(sort === opt.value)}>
-                  {opt.label}
-                </button>
-              </Fragment>
+            {/* Sort options — pill buttons */}
+            {SORT_OPTIONS.map((opt) => (
+              <button key={opt.value} onClick={() => setSort(opt.value)} style={sortItemStyle(sort === opt.value)}>
+                {opt.label}
+              </button>
             ))}
 
             {/* Spacer */}
@@ -548,12 +540,12 @@ function ProductsContent() {
                     background: "none",
                     cursor: "pointer", fontSize: "13px",
                     fontWeight: sort === opt.value ? 700 : 400,
-                    color: sort === opt.value ? "#e53935" : "hsl(var(--foreground))",
+                    color: sort === opt.value ? "hsl(var(--primary))" : "hsl(var(--foreground))",
                   }}
                 >
                   {opt.label}
                   {sort === opt.value && (
-                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#e53935", flexShrink: 0 }} />
+                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "hsl(var(--primary))", flexShrink: 0 }} />
                   )}
                 </button>
               ))}
@@ -587,7 +579,7 @@ function ProductsContent() {
                 {activeFilterCount > 0 && (
                   <button
                     onClick={clearFilters}
-                    style={{ fontSize: "12px", color: "#e53935", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
+                    style={{ fontSize: "12px", color: "hsl(var(--primary))", background: "none", border: "none", cursor: "pointer", fontWeight: 600 }}
                   >
                     حذف فیلترها
                   </button>
@@ -615,7 +607,7 @@ function ProductsContent() {
               <button
                 onClick={() => setFiltersOpen(false)}
                 style={{
-                  width: "100%", background: "#e53935", color: "#fff",
+                  width: "100%", background: "hsl(var(--primary))", color: "#fff",
                   border: "none", borderRadius: "14px", padding: "13px 0",
                   fontSize: "13px", fontWeight: 800, cursor: "pointer",
                 }}
