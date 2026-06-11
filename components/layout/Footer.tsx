@@ -33,10 +33,10 @@ export function Footer() {
             <h3 className="font-bold text-sm mb-3 text-white/90">دسترسی سریع</h3>
             <ul className="space-y-2">
               {[
-                { label: "خانه",          href: "/"        },
-                { label: "همه محصولات",   href: "/products"},
-                { label: "سبد خرید",      href: "/cart"    },
-                { label: "پیگیری سفارش",  href: "/orders"  },
+                { label: "خانه",          href: "/"               },
+                { label: "همه محصولات",   href: "/products"       },
+                { label: "سبد خرید",      href: "/cart"           },
+                { label: "پیگیری سفارش",  href: "/account/orders" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-sm text-gray-400 hover:text-white transition-colors">
@@ -52,10 +52,11 @@ export function Footer() {
             <h3 className="font-bold text-sm mb-3 text-white/90">راهنما</h3>
             <ul className="space-y-2">
               {[
-                { label: "درباره ما",      href: "/about"  },
-                { label: "تماس با ما",     href: "/contact"},
-                { label: "قوانین و مقررات",href: "/terms"  },
-                { label: "حریم خصوصی",    href: "/privacy"},
+                { label: "درباره ما",      href: "/about"   },
+                { label: "تماس با ما",     href: "/contact" },
+                { label: "سوالات متداول",  href: "/faq"     },
+                { label: "قوانین و مقررات",href: "/terms"   },
+                { label: "حریم خصوصی",    href: "/privacy" },
               ].map((l) => (
                 <li key={l.href}>
                   <Link href={l.href} className="text-sm text-gray-400 hover:text-white transition-colors">

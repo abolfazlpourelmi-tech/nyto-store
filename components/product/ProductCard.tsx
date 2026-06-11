@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, Plus, Star } from "lucide-react";
 import { useCartStore } from "@/store/cart";
+import { useFavoritesStore } from "@/store/favorites";
 import { formatPrice, persianNumber } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -14,7 +15,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, view = "grid" }: ProductCardProps) {
-  const addItem = useCartStore((s) => s.addItem);
+  const addItem    = useCartStore((s) => s.addItem);
+  const toggleFav  = useFavoritesStore((s) => s.toggle);
+  const isFav      = useFavoritesStore((s) => s.items.some((p) => p.id === product.id));
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,6 +29,11 @@ export function ProductCard({ product, view = "grid" }: ProductCardProps) {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    toggleFav(product);
+    toast({
+      title: isFav ? "از علاقه‌مندی‌ها حذف شد" : "به علاقه‌مندی‌ها اضافه شد ♥",
+      description: product.name,
+    });
   };
 
   /* ── List view ── */
@@ -105,12 +113,13 @@ export function ProductCard({ product, view = "grid" }: ProductCardProps) {
           {/* Wishlist — bottom-left */}
           <button
             onClick={handleWishlist}
+            aria-label={isFav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
             className={cn(
               "absolute bottom-2 left-2 w-7 h-7 bg-card/85 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm transition-all duration-200",
-              "opacity-0 group-hover:opacity-100"
+              isFav ? "opacity-100" : "opacity-0 group-hover:opacity-100"
             )}
           >
-            <Heart className="h-3.5 w-3.5 text-muted-foreground" />
+            <Heart className={cn("h-3.5 w-3.5 transition-colors", isFav ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
           </button>
 
           {/* Out of stock overlay */}

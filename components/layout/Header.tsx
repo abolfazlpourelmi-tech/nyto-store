@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { ShoppingCart, Search, User, Bell, Menu, ChevronLeft } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCartStore } from "@/store/cart";
+import { useAuthStore } from "@/store/auth";
 import { useRouter } from "next/navigation";
 import { categories } from "@/lib/mock-data";
 
@@ -31,7 +32,13 @@ export function Header() {
   const [hoveredCat, setHoveredCat] = useState<string>(MEGA_CATS[0].id);
   const megaTimer = useRef<ReturnType<typeof setTimeout>>();
   const itemCount = useCartStore((s) => s.itemCount());
+  const user      = useAuthStore((s) => s.user);
   const router    = useRouter();
+
+  // Persisted auth state is only reliable after mount (avoids hydration mismatch)
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const accountLabel = mounted && user ? user.fullName.split(" ")[0] : "ورود";
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -210,7 +217,7 @@ export function Header() {
             }}
           >
             <User style={{ width: "14px", height: "14px" }} />
-            ورود
+            {accountLabel}
           </Link>
 
           {/* Cart */}

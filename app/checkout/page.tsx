@@ -3,17 +3,31 @@ import { useState } from "react";
 import Link from "next/link";
 import { Check, CreditCard, Banknote, ArrowRight } from "lucide-react";
 import { useCartStore } from "@/store/cart";
+import { useOrdersStore } from "@/store/orders";
+import { useAddressStore } from "@/store/address";
+import { useAuthStore } from "@/store/auth";
 import { formatPrice, persianNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 const steps = ["ارسال", "پرداخت", "تأیید"];
 
 export default function CheckoutPage() {
+  const user        = useAuthStore((s) => s.user);
+  const defaultAddr = useAddressStore((s) => s.getDefault());
+  const addAddress  = useAddressStore((s) => s.addAddress);
+  const addOrder    = useOrdersStore((s) => s.addOrder);
+
   const [step,          setStep]          = useState(0);
   const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">("online");
   const [ordered,       setOrdered]       = useState(false);
+  const [trackingCode,  setTrackingCode]  = useState("");
   const [form,          setForm]          = useState({
-    fullName: "", phone: "", province: "", city: "", address: "", postalCode: "",
+    fullName: defaultAddr?.fullName ?? user?.fullName ?? "",
+    phone:    defaultAddr?.phone ?? user?.phone ?? "",
+    province: defaultAddr?.province ?? "",
+    city:     defaultAddr?.city ?? "",
+    address:  defaultAddr?.address ?? "",
+    postalCode: defaultAddr?.postalCode ?? "",
   });
 
   const { items, total, clearCart, itemCount } = useCartStore();
@@ -24,7 +38,26 @@ export default function CheckoutPage() {
 
   const updateForm = (key: string, val: string) => setForm((f) => ({ ...f, [key]: val }));
 
-  const handleSubmit = () => { clearCart(); setOrdered(true); };
+  const handleSubmit = () => {
+    // Persist the address if it isn't already saved
+    const alreadySaved = defaultAddr && defaultAddr.address === form.address;
+    if (!alreadySaved && form.address) {
+      addAddress({ ...form });
+    }
+
+    const order = addOrder({
+      items: [...items],
+      address: { id: "", ...form },
+      paymentMethod,
+      itemsTotal: cartTotal,
+      shipping,
+      total: grandTotal,
+    });
+
+    setTrackingCode(order.trackingCode);
+    clearCart();
+    setOrdered(true);
+  };
 
   if (count === 0 && !ordered) {
     return (
@@ -46,14 +79,20 @@ export default function CheckoutPage() {
         <div>
           <h1 className="text-2xl font-black mb-2">سفارش ثبت شد!</h1>
           <p className="text-sm text-muted-foreground max-w-xs">
-            سفارش شما با موفقیت ثبت گردید. کد پیگیری به زودی ارسال می‌شود.
+            سفارش شما با موفقیت ثبت گردید. وضعیت آن را می‌توانید در حساب کاربری دنبال کنید.
           </p>
         </div>
+        {trackingCode && (
+          <div className="bg-surface border border-border/60 rounded-2xl px-5 py-3">
+            <p className="text-xs text-muted-foreground mb-0.5">کد پیگیری سفارش</p>
+            <p className="text-lg font-black text-primary tracking-wider" dir="ltr">{trackingCode}</p>
+          </div>
+        )}
         <div className="flex gap-3">
-          <Link href="/"
-            className="bg-primary text-white font-bold rounded-2xl px-5 py-3 text-sm active:scale-95 transition-transform"
+          <Link href="/account/orders"
+            className="bg-primary text-white font-bold rounded-2xl px-5 py-3 text-sm active:scale-95 transition-transform shadow-primary"
           >
-            بازگشت به خانه
+            پیگیری سفارش
           </Link>
           <Link href="/products"
             className="bg-surface border border-border/60 font-semibold rounded-2xl px-5 py-3 text-sm active:scale-95 transition-transform"

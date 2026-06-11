@@ -6,11 +6,11 @@ import { useCartStore } from "@/store/cart";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/",        icon: Home,        label: "خانه"    },
-  { href: "/products",icon: Grid2X2,     label: "محصولات" },
-  { href: "/cart",    icon: ShoppingCart,label: "سبد"      },
-  { href: "/orders",  icon: Package,     label: "سفارش‌ها" },
-  { href: "/account", icon: User,        label: "حساب"     },
+  { href: "/",               icon: Home,        label: "خانه"    },
+  { href: "/products",       icon: Grid2X2,     label: "محصولات" },
+  { href: "/cart",           icon: ShoppingCart,label: "سبد"      },
+  { href: "/account/orders", icon: Package,     label: "سفارش‌ها" },
+  { href: "/account",        icon: User,        label: "حساب"     },
 ];
 
 export function BottomNav() {
@@ -21,7 +21,10 @@ export function BottomNav() {
     <nav className="fixed bottom-0 inset-x-0 z-50 md:hidden bg-card/95 backdrop-blur-md border-t border-border safe-pb">
       <div className="flex items-center justify-around h-16">
         {navItems.map(({ href, icon: Icon, label }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+          const active =
+            href === "/"        ? pathname === "/"
+            : href === "/account" ? pathname === "/account"
+            : pathname.startsWith(href);
           const isCart = href === "/cart";
 
           return (

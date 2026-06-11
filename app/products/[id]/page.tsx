@@ -6,6 +6,7 @@ import { Star, ShoppingCart, Heart, Truck, Shield, ChevronRight, ArrowRight } fr
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore } from "@/store/cart";
+import { useFavoritesStore } from "@/store/favorites";
 import { formatPrice, persianNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
@@ -19,7 +20,9 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity,      setQuantity]      = useState(1);
   const [activeTab,     setActiveTab]     = useState<"desc" | "spec">("desc");
-  const addItem = useCartStore((s) => s.addItem);
+  const addItem   = useCartStore((s) => s.addItem);
+  const toggleFav = useFavoritesStore((s) => s.toggle);
+  const isFav     = useFavoritesStore((s) => s.items.some((p) => p.id === product.id));
 
   const related = products
     .filter((p) => p.category.id === product.category.id && p.id !== product.id)
@@ -28,6 +31,14 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   const handleAddToCart = () => {
     addItem(product, quantity);
     toast({ title: "به سبد اضافه شد ✓", description: product.name });
+  };
+
+  const handleToggleFav = () => {
+    toggleFav(product);
+    toast({
+      title: isFav ? "از علاقه‌مندی‌ها حذف شد" : "به علاقه‌مندی‌ها اضافه شد ♥",
+      description: product.name,
+    });
   };
 
   return (
@@ -201,8 +212,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                   <ShoppingCart className="h-4 w-4" />
                   افزودن به سبد خرید
                 </button>
-                <button className="w-11 h-11 rounded-2xl border-2 border-border flex items-center justify-center hover:border-primary/50 transition-colors">
-                  <Heart className="h-4.5 w-4.5 text-muted-foreground" />
+                <button
+                  onClick={handleToggleFav}
+                  aria-label={isFav ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+                  className={cn(
+                    "w-11 h-11 rounded-2xl border-2 flex items-center justify-center transition-colors",
+                    isFav ? "border-red-500/50 bg-red-500/10" : "border-border hover:border-primary/50"
+                  )}
+                >
+                  <Heart className={cn("h-4.5 w-4.5", isFav ? "fill-red-500 text-red-500" : "text-muted-foreground")} />
                 </button>
               </div>
             )}
