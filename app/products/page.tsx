@@ -340,8 +340,11 @@ function ProductsContent() {
         className="flex md:hidden"
         style={{
           flexDirection: "row", flexWrap: "nowrap",
-          overflowX: "auto", gap: "8px", paddingBottom: "10px",
-          scrollbarWidth: "none", marginBottom: "4px",
+          overflowX: "auto", gap: "8px",
+          // top/side padding so the absolute filter-count badge isn't clipped
+          // by the scroll container (overflow-x:auto also clips overflow-y)
+          paddingTop: "8px", paddingBottom: "10px", paddingInline: "2px",
+          scrollbarWidth: "none", marginBottom: "2px",
         } as React.CSSProperties}
       >
         {/* Sort chip — shows active sort label, opens sort sheet */}
